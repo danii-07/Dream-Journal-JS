@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dream Journal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <button class="btn primary" id="enterAppBtn">Enter</button>
+        </div>
+    </div>
+
+    <div id="appContainer" class="app-container hidden">
+        <header>
+            <h1>Dream Journal</h1>
+            <!-- NEW: Navigation buttons in the header -->
+            <nav class="app-nav">
+                <!-- This button is visible when on the mainRecordScreen -->
+                <button class="btn nav-btn" id="goToViewDreamsBtn">View All Dreams</button>
+                <!-- This button is initially hidden and shown only on allDreamsGridScreen -->
+                <button class="btn nav-btn hidden" id="backToRecordBtn">Back to Record Dream</button>
+            </nav>
+            <!-- END NEW -->
+        </header>
+
+        <main class="content-area">
+            <!-- Main Screen (Record Dream + Calendar) -->
+            <section id="mainRecordScreen" class="screen">
+                <div class="dream-input-panel">
+                    <h2>Record Your Dream</h2>
+                    <textarea id="dreamDescription" placeholder="Describe your dream here..."></textarea>
+                    <div class="input-group">
+                        <label for="dreamEmotion">Emotion:</label>
+                        <input type="text" id="dreamEmotion" placeholder="e.g., Joyful, Anxious, Confused">
+                    </div>
+                    <div class="input-group">
+                        <label for="dreamKeywords">Keywords (comma-separated):</label>
+                        <input type="text" id="dreamKeywords" placeholder="e.g., flying, school, dog">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn primary" id="saveDreamBtn">Save Dream</button>
+                        <button class="btn secondary" id="analyzeDreamBtn">Simulate AI Analysis</button>
+                    </div>
+
+                    <div id="aiAnalysisResult" class="analysis-box" style="display: none;">
+                        <strong>Simulated AI Analysis:</strong><br>
+                        <span id="analysisText"></span>
+                    </div>
+
+                    <div class="info-note encryption-note">
+                        <strong>Note on Encryption & Data Privacy:</strong> In a full application, all dream data would be robustly encrypted (e.g., AES-256) before local storage and any cloud transfer. User data privacy is paramount and would never be sold.
+                    </div>
+                </div>
+
+                <!-- Calendar Section (Now back on the main screen's sidebar) -->
+                <aside class="sidebar-panel">
+                    <div id="calendar-section" class="calendar-section">
+                        <div class="calendar-header">
+                            <button id="prevMonthBtn">&lt;</button>
+                            <span id="currentMonthYear"></span>
+                            <button id="nextMonthBtn">&gt;</button>
+                        </div>
+                        <div class="calendar-grid-header">
+                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                        </div>
+                        <div id="calendar-grid" class="calendar-grid">
+                            <!-- Calendar days will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                    <!-- Calendar-filtered dreams will appear here -->
+                    <h2>Dreams for <span id="filteredDreamsDate">Selected Day</span></h2>
+                    <div id="filteredDreamsList" class="dreams-list">
+                        <p>Click a day on the calendar to see dreams for that day.</p>
+                    </div>
+                </aside>
+            </section>
+            <!-- END NEW: Main Screen -->
+
+            <!-- NEW: All Dreams Grid Screen -->
+            <section id="allDreamsGridScreen" class="screen hidden">
+                <div class="all-dreams-grid-container">
+                    <h2>All My Dreams</h2>
+                    <!-- REMOVED: This button is now in the header -->
+                    <div id="allDreamsGrid" class="dreams-grid">
+                        <!-- All dream items will be loaded here in a grid layout -->
+                    </div>
+                </div>
+            </section>
+            <!-- END NEW: All Dreams Grid Screen -->
+        </main>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
