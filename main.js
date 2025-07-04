@@ -1,33 +1,29 @@
-// main.js - Adapted for @google/genai (experimental/preview client)
-
-require('dotenv').config(); // Load environment variables from .env
+require('dotenv').config();
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
 const fs = require('fs/promises'); // Use fs.promises for async file operations
 
-// !! IMPORTANT: Changed import to the new client library !!
+
 const { GoogleGenAI } = require('@google/genai');
 
-let mainWindow; // Declare mainWindow at a higher scope
+let mainWindow;
 
 const dreamsFilePath = path.join(app.getPath('userData'), 'dreams.json');
 
 // --- Google Gemini AI Configuration (for @google/genai) ---
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY; // Get API key from environment
 
-let aiClient; // Renamed from genAI
-let generativeModelId = "gemini-2.5-flash"; // The model you specified in your snippet
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+let aiClient;
+let generativeModelId = "gemini-2.5-flash";
 
 if (GEMINI_API_KEY) {
   try {
-    // Instantiate the new client (no API key passed directly here in your snippet)
-    // Assuming the API key is picked up via environment variables or another default config
-    // If you get authentication errors, you might need to pass { apiKey: GEMINI_API_KEY } here.
     aiClient = new GoogleGenAI({});
     console.log("New Gemini AI client initialized successfully.");
   } catch (initError) {
     console.error("ERROR: Failed to initialize GoogleGenAI client:", initError);
-    aiClient = null; // Ensure client is null if init fails
+    aiClient = null;
   }
 } else {
   console.error("CRITICAL ERROR: GEMINI_API_KEY is not set or empty. AI functions will not work.");
@@ -35,6 +31,7 @@ if (GEMINI_API_KEY) {
 
 
 // --- Electron Window Creation ---
+
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
@@ -71,6 +68,7 @@ app.on('window-all-closed', () => {
 });
 
 // --- IPC Handler for Saving Dreams ---
+
 ipcMain.handle('save-dream', async (event, dreamData) => {
   try {
     let dreams = [];
@@ -80,7 +78,7 @@ ipcMain.handle('save-dream', async (event, dreamData) => {
         dreams = JSON.parse(rawData);
       })
       .catch(() => {
-        // File does not exist, 'dreams' remains an empty array
+        // IF file does not exist, 'dreams' remains an empty array
       });
 
     dreams.push(dreamData);
@@ -93,6 +91,7 @@ ipcMain.handle('save-dream', async (event, dreamData) => {
 });
 
 // --- IPC Handler for Loading Dreams ---
+
 ipcMain.handle('load-dreams', async () => {
   try {
     await fs.access(dreamsFilePath, fs.constants.F_OK);
@@ -108,8 +107,9 @@ ipcMain.handle('load-dreams', async () => {
 });
 
 // --- IPC Handler for Google Gemini AI Analysis ---
+
 ipcMain.handle('analyze-dream', async (event, dreamContext) => {
-    // Ensure the new AI client is initialized
+    
     if (!aiClient) {
         console.error("AI analysis not fully initialized. GoogleGenAI client failed to load during app startup.");
         return "AI analysis is not configured. Please ensure your GEMINI_API_KEY is correct and client initialized.";
@@ -128,9 +128,10 @@ Dream Description: "${description}"`;
         promptContent += `\nKeywords/Symbols: ${keywords.join(', ')}`;
     }
 
-    // --- MODIFIED PROMPT LINE ---
+    // --- PROMPT LINE ---
+
     promptContent += `\n\nPlease provide a concise analysis in a single paragraph. Start directly with the analysis, no conversational filler.`;
-    // --- END MODIFIED PROMPT LINE ---
+  
 
     try {
         const response = await aiClient.models.generateContent({

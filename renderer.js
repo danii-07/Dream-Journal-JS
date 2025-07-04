@@ -1,43 +1,44 @@
-// --- Existing Renderer.js code ---
 const dreamDescriptionInput = document.getElementById('dreamDescription');
 const dreamEmotionInput = document.getElementById('dreamEmotion');
 const dreamKeywordsInput = document.getElementById('dreamKeywords');
 const saveDreamBtn = document.getElementById('saveDreamBtn');
-const analyzeDreamBtn = document.getElementById('analyzeDreamBtn'); // For the form button
+const analyzeDreamBtn = document.getElementById('analyzeDreamBtn');
 const aiAnalysisResultDiv = document.getElementById('aiAnalysisResult');
 const analysisTextSpan = document.getElementById('analysisText');
 const welcomeScreen = document.getElementById('welcomeScreen');
 const enterAppBtn = document.getElementById('enterAppBtn');
-const appContainer = document.getElementById('appContainer'); // Get appContainer here
+const appContainer = document.getElementById('appContainer'); 
 
-// --- NEW/MODIFIED Screen Elements ---
-const mainRecordScreen = document.getElementById('mainRecordScreen'); // Your primary screen
-const allDreamsGridScreen = document.getElementById('allDreamsGridScreen'); // Your new grid screen
+// --- Screen Elements ---
 
-// --- NEW/MODIFIED Navigation Buttons (now in header) ---
+const mainRecordScreen = document.getElementById('mainRecordScreen');
+const allDreamsGridScreen = document.getElementById('allDreamsGridScreen'); 
+
+// --- Navigation Buttons (now in header) ---
+
 const goToViewDreamsBtn = document.getElementById('goToViewDreamsBtn');
 const backToRecordBtn = document.getElementById('backToRecordBtn');
 
 // --- Calendar Variables ---
+
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 let allDreams = []; // All loaded dreams
-let selectedDate = null; // The date selected on the calendar (still YYYY-MM-DD for consistency with dream.date)
+let selectedDate = null; // The date selected on the calendar
 
 // --- Calendar DOM Elements ---
+
 const currentMonthYearSpan = document.getElementById('currentMonthYear');
 const prevMonthBtn = document.getElementById('prevMonthBtn');
 const nextMonthBtn = document.getElementById('nextMonthBtn');
 const calendarGrid = document.getElementById('calendar-grid');
 
 // --- Dream List Elements ---
+
 const filteredDreamsList = document.getElementById('filteredDreamsList'); // For calendar-filtered dreams
 const filteredDreamsDateSpan = document.getElementById('filteredDreamsDate'); // To show selected date
 const allDreamsGrid = document.getElementById('allDreamsGrid'); // For the grid display
 
-// --- Helper: Format Date for Calendar (YYYY-MM-DD) ---
-// This function remains as is because your dream objects store 'date' in YYYY-MM-DD format
-// for easy filtering by day. The full date/time formatting happens at display.
 function formatDateForCalendar(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -46,20 +47,21 @@ function formatDateForCalendar(date) {
 }
 
 // --- Function to Render Calendar Grid ---
+
 async function renderCalendar() {
-    // Current month/year display: only show month and year, not time here
+    
     currentMonthYearSpan.textContent = new Date(currentYear, currentMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' });
     calendarGrid.innerHTML = '';
 
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-    // Ensure allDreams is loaded for calendar marking
+   
     if (allDreams.length === 0 || allDreams.needsRefresh) {
         allDreams = await window.electronAPI.loadDreams();
-        allDreams.needsRefresh = false; // Reset flag
+        allDreams.needsRefresh = false; 
     }
-    // We still use YYYY-MM-DD for checking which days HAVE dreams
+    
     const dreamDates = new Set(allDreams.map(dream => dream.date));
 
     for (let i = 0; i < firstDayOfMonth; i++) {
@@ -70,18 +72,19 @@ async function renderCalendar() {
 
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentYear, currentMonth, day);
-        const dateString = formatDateForCalendar(date); // YYYY-MM-DD format
+        const dateString = formatDateForCalendar(date); 
 
         const dayElement = document.createElement('div');
         dayElement.classList.add('calendar-day');
         dayElement.textContent = day;
-        dayElement.dataset.date = dateString; // Store YYYY-MM-DD
+        dayElement.dataset.date = dateString; 
 
         if (dreamDates.has(dateString)) {
             dayElement.classList.add('has-dreams');
         }
 
         // Apply 'selected' class if this day matches the selectedDate
+
         if (selectedDate && selectedDate === dateString) {
             dayElement.classList.add('selected');
         }
@@ -92,7 +95,7 @@ async function renderCalendar() {
                 previouslySelected.classList.remove('selected');
             }
             dayElement.classList.add('selected');
-            selectedDate = dateString; // Update selectedDate on click (still YYYY-MM-DD)
+            selectedDate = dateString;
             displayDreamsForSelectedDay(selectedDate); // Display dreams only for this day
         });
         calendarGrid.appendChild(dayElement);
@@ -102,13 +105,14 @@ async function renderCalendar() {
 }
 
 // --- Function to Display Dreams for Selected Day (Calendar Sidebar) ---
+
 function displayDreamsForSelectedDay(dateToFilter) {
     filteredDreamsList.innerHTML = ''; // Clear the list every time
 
     if (dateToFilter) {
         const dreamsOnDay = allDreams.filter(dream => dream.date === dateToFilter);
 
-        // MODIFIED: Format the displayed date using toLocaleDateString for the span
+       
         const displayDate = new Date(dateToFilter + 'T00:00:00'); // Create a Date object for formatting, assumes midnight
         filteredDreamsDateSpan.textContent = displayDate.toLocaleDateString('en-US', {
             weekday: 'long', // "Monday"
@@ -124,6 +128,7 @@ function displayDreamsForSelectedDay(dateToFilter) {
             filteredDreamsList.appendChild(p);
         } else {
             // Sort dreams by ID (which is timestamp), so most recent appears first for the selected day
+
             dreamsOnDay.sort((a, b) => b.id - a.id);
             dreamsOnDay.forEach(dream => {
                 const dreamItem = createDreamItem(dream); // Re-use helper to create HTML
@@ -132,6 +137,7 @@ function displayDreamsForSelectedDay(dateToFilter) {
         }
     } else {
         // If no date is selected, display the empty message
+
         filteredDreamsDateSpan.textContent = "Selected Day"; // Reset display text
         const p = document.createElement('p');
         p.textContent = 'Click a day on the calendar to see dreams for that day.';
@@ -140,10 +146,12 @@ function displayDreamsForSelectedDay(dateToFilter) {
 }
 
 // --- Function to Display ALL Dreams in Grid ---
+
 async function displayAllDreamsInGrid() {
     allDreamsGrid.innerHTML = ''; // Clear the grid
 
     // Ensure allDreams is loaded for grid display
+
     if (allDreams.length === 0 || allDreams.needsRefresh) {
         allDreams = await window.electronAPI.loadDreams();
         allDreams.needsRefresh = false;
@@ -154,7 +162,9 @@ async function displayAllDreamsInGrid() {
         p.textContent = 'No dreams saved yet. Record some dreams!';
         allDreamsGrid.appendChild(p);
     } else {
+
         // Sort by most recent for the "All Dreams" view
+
         allDreams.sort((a, b) => b.id - a.id);
         allDreams.forEach(dream => {
             const dreamItem = createDreamItem(dream); // Re-use helper
@@ -164,11 +174,12 @@ async function displayAllDreamsInGrid() {
 }
 
 // --- Helper to Create a Dream Item HTML Element (re-usable for both lists/grids) ---
+
 function createDreamItem(dream) {
     const dreamItem = document.createElement('div');
     dreamItem.className = 'dream-item';
 
-    // MODIFIED: Format the date in the dream item heading using toLocaleString
+    
     const dreamDate = new Date(dream.id); // Use dream.id as it's a timestamp
     const formattedDateTime = dreamDate.toLocaleString('en-US', {
         year: 'numeric',
@@ -176,7 +187,7 @@ function createDreamItem(dream) {
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true // e.g., "July 3, 2025, 11:36 AM"
+        hour12: true // example: "July 3, 2025, 11:36 AM"
     });
 
     dreamItem.innerHTML = `
@@ -197,6 +208,7 @@ function createDreamItem(dream) {
 }
 
 // --- Helper to escape HTML for data attributes ---
+
 function escapeHtml(text) {
     if (typeof text !== 'string') {
         text = String(text);
@@ -212,6 +224,7 @@ function escapeHtml(text) {
 }
 
 // --- Event Delegation for Analyze Dream Buttons (Both lists/grids) ---
+
 document.body.addEventListener('click', async (event) => {
     const targetButton = event.target.closest('.analyze-btn');
 
@@ -237,19 +250,24 @@ document.body.addEventListener('click', async (event) => {
 });
 
 // --- Screen Switching Logic ---
+
 function showScreen(screenToShow) {
     // Hide all main content screens
+
     mainRecordScreen.classList.add('hidden');
     allDreamsGridScreen.classList.add('hidden');
 
     // Hide both navigation buttons initially
+
     goToViewDreamsBtn.classList.add('hidden');
     backToRecordBtn.classList.add('hidden');
 
     // Show the desired screen
+
     screenToShow.classList.remove('hidden');
 
     // Manage navigation button visibility based on the active screen
+
     if (screenToShow === mainRecordScreen) {
         goToViewDreamsBtn.classList.remove('hidden'); // Show "View All Dreams"
         backToRecordBtn.classList.add('hidden'); // Hide "Back to Record Dream"
@@ -258,13 +276,16 @@ function showScreen(screenToShow) {
     } else if (screenToShow === allDreamsGridScreen) {
         goToViewDreamsBtn.classList.add('hidden'); // Hide "View All Dreams"
         backToRecordBtn.classList.remove('hidden'); // Show "Back to Record Dream"
+
         // Load all dreams and display them in the grid
-        allDreams.needsRefresh = true; // Set flag to force reload of latest data
-        displayAllDreamsInGrid(); // This will trigger the load
+
+        allDreams.needsRefresh = true; // force reload of latest data
+        displayAllDreamsInGrid(); // This will trigger it
     }
 }
 
 // --- Event Listeners ---
+
 saveDreamBtn.addEventListener('click', async () => {
     const description = dreamDescriptionInput.value.trim();
     const emotion = dreamEmotionInput.value.trim();
@@ -272,10 +293,10 @@ saveDreamBtn.addEventListener('click', async () => {
     const keywords = keywordsRaw ? keywordsRaw.split(',').map(k => k.trim()).filter(k => k) : [];
 
     if (description) {
-        const now = new Date(); // Get current date and time for the ID
+        const now = new Date(); // get current date and time for the ID
         const dreamData = {
-            id: now.getTime(), // Use timestamp for unique ID and sorting
-            date: formatDateForCalendar(now), // Still YYYY-MM-DD for calendar filtering
+            id: now.getTime(), // use timestamp for unique ID and sorting
+            date: formatDateForCalendar(now),
             description: description,
             emotion: emotion,
             keywords: keywords,
@@ -318,6 +339,7 @@ analyzeDreamBtn.addEventListener('click', async () => { // This is the button fo
 });
 
 // --- Calendar Navigation Event Listeners ---
+
 prevMonthBtn.addEventListener('click', () => {
     currentMonth--;
     if (currentMonth < 0) {
@@ -338,7 +360,8 @@ nextMonthBtn.addEventListener('click', () => {
     renderCalendar();
 });
 
-// --- NEW Navigation Button Event Listeners ---
+// --- Navigation Button Event Listeners ---
+
 goToViewDreamsBtn.addEventListener('click', () => {
     showScreen(allDreamsGridScreen);
 });
@@ -348,6 +371,7 @@ backToRecordBtn.addEventListener('click', () => {
 });
 
 // --- Initial Application Load ---
+
 document.addEventListener('DOMContentLoaded', () => {
     enterAppBtn.addEventListener('click', async () => {
         welcomeScreen.classList.add('hidden');

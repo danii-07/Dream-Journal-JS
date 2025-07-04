@@ -15,14 +15,13 @@
     <div id="appContainer" class="app-container hidden">
         <header>
             <h1>Dream Journal</h1>
-            <!-- NEW: Navigation buttons in the header -->
             <nav class="app-nav">
                 <!-- This button is visible when on the mainRecordScreen -->
                 <button class="btn nav-btn" id="goToViewDreamsBtn">View All Dreams</button>
                 <!-- This button is initially hidden and shown only on allDreamsGridScreen -->
                 <button class="btn nav-btn hidden" id="backToRecordBtn">Back to Record Dream</button>
             </nav>
-            <!-- END NEW -->
+           
         </header>
 
         <main class="content-area">
@@ -54,7 +53,7 @@
                     </div>
                 </div>
 
-                <!-- Calendar Section (Now back on the main screen's sidebar) -->
+                <!-- Calendar Section -->
                 <aside class="sidebar-panel">
                     <div id="calendar-section" class="calendar-section">
                         <div class="calendar-header">
@@ -76,19 +75,19 @@
                     </div>
                 </aside>
             </section>
-            <!-- END NEW: Main Screen -->
+            <!-- END Main Screen -->
 
-            <!-- NEW: All Dreams Grid Screen -->
+            <!-- All Dreams Grid Screen -->
             <section id="allDreamsGridScreen" class="screen hidden">
                 <div class="all-dreams-grid-container">
                     <h2>All My Dreams</h2>
-                    <!-- REMOVED: This button is now in the header -->
+                    
                     <div id="allDreamsGrid" class="dreams-grid">
                         <!-- All dream items will be loaded here in a grid layout -->
                     </div>
                 </div>
             </section>
-            <!-- END NEW: All Dreams Grid Screen -->
+            <!-- END All Dreams Grid Screen -->
         </main>
     </div>
 

@@ -1,4 +1,5 @@
 /* General Body and HTML Reset/Base Styles */
+
 body, html {
     margin: 0;
     padding: 0;
@@ -8,29 +9,29 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Darkest background using Jet for deep gray aesthetic */
     background: linear-gradient(135deg, #2D2D2D 0%, #1A1A1A 50%, #0F0F0F 100%);
-    color: #E0E0E0; /* Slightly lighter gray for general text for good contrast */
+    color: #E0E0E0;
 }
 
 /* Welcome Screen Styles */
+
 .welcome-screen {
-    position: fixed; /* Fixed to cover the entire viewport */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Push content to the bottom */
+    justify-content: flex-end;
     align-items: center;
     background-image: url('./assets/images/djournal.png');
     background-size: contain; /* Shows the entire image, maintaining aspect ratio */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents tiling if image is smaller */
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 1000;
     transition: opacity 0.8s ease-in-out;
-    padding-bottom: 25vh; /* Adjust this value (e.g., 50vh, 60vh) to fine-tune button position */
+    padding-bottom: 25vh;
 }
 
 .welcome-content {
@@ -45,39 +46,41 @@ body, html {
     width: auto;
 }
 
-/* Remove welcome screen heading */
+/* Removes the welcome screen heading */
+
 .welcome-content h1 {
     display: none;
 }
 
 /* Utility class for hiding elements */
+
 .hidden {
     display: none !important; /* Use !important to ensure override */
     opacity: 0;
     pointer-events: none;
 }
 
-/* Main app container with new background */
+/* Main app container with the cool background */
+
 .app-container {
     display: flex;
     flex-direction: column;
     width: 95vw;
     height: 95vh;
-    max-width: none; /* Allows it to expand */
+    max-width: none;
     background-image: url('./assets/images/maindjo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
     border-radius: 10px;
-    overflow: hidden; /* Important: Controls overflow for the entire app */
+    overflow: hidden; 
     position: relative;
 
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
 }
 
-/* Removed the pseudo-element overlay as per previous request, ensuring transparency */
 .app-container::before {
     content: '';
     position: absolute;
@@ -91,6 +94,7 @@ body, html {
 }
 
 /* Ensure content appears above any potential overlays */
+
 .app-container > * {
     position: relative;
     z-index: 2;
@@ -100,7 +104,8 @@ body, html {
     opacity: 1;
 }
 
-/* Header Styles - Darker gray with subtle borders */
+/* Header Styles */
+
 header {
     background: linear-gradient(135deg, rgba(45, 45, 45, 0.95) 0%, rgba(60, 60, 60, 0.95) 100%);
     color: #E0E0E0;
@@ -122,31 +127,31 @@ header h1 {
     letter-spacing: 0.5px;
 }
 
-/* --- NEW SCREEN MANAGEMENT STYLES --- */
+/* --- The other SCREEN MANAGEMENT STYLES --- */
+
 .content-area {
     display: flex;
-    flex-grow: 1; /* Allows it to take remaining height */
-    padding: 25px; /* Apply padding here */
-    position: relative; /* Essential for absolute positioning of .screen children */
-    overflow: hidden; /* Hide overflow from absolute children, content will scroll within specific screens */
-    box-sizing: border-box; /* Include padding in calculation */
+    flex-grow: 1; 
+    padding: 25px;
+    position: relative; 
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* Base style for all screens */
+
 .screen {
-    position: absolute; /* Position screens on top of each other */
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex; /* Flexbox for internal layout */
-    padding: 0; /* Padding handled by internal containers, not directly on screen */
+    display: flex; 
+    padding: 0; 
     transition: opacity 0.3s ease-in-out;
-    background: transparent; /* Default transparent */
-    pointer-events: auto; /* Allow interaction by default */
-    box-sizing: border-box; /* Include padding/border in element's total width and height */
-    /* TEMPORARY DEBUGGING AID: Add a background to see the screen boundaries */
-    /* background-color: rgba(255, 0, 255, 0.1); */ /* Faint purple for screen */
+    background: transparent; 
+    pointer-events: auto; 
+    box-sizing: border-box; 
 }
 
 .screen.hidden {
@@ -154,31 +159,34 @@ header h1 {
     pointer-events: none;
 }
 
-/* Apply specific background to the All Dreams Grid Screen */
+/* specific background to the All Dreams Grid Screen */
+
 #allDreamsGridScreen {
     background-image: url('./assets/images/maindjo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     flex-direction: column;
-    padding: 25px; /* Add padding here for screen content */
-    overflow-y: auto; /* Allow scrolling within this screen if content exceeds height */
+    padding: 25px; 
+    overflow-y: auto; 
     align-items: center;
-    position: relative; /* Context for children */
+    position: relative; 
 }
 
-/* Ensure content on #allDreamsGridScreen appears above its background */
+/* Ensure content on allDreamsGridScreen appears above its background */
+
 #allDreamsGridScreen > * {
     position: relative;
     z-index: 2;
 }
 
 /* --- Main Record Screen Layout --- */
+
 #mainRecordScreen {
-    flex-direction: row; /* Side-by-side layout for input and sidebar */
+    flex-direction: row; 
     gap: 25px;
-    padding: 25px; /* Add padding here for screen content */
-    overflow-y: auto; /* Allow scrolling for the main record screen if content overflows */
+    padding: 25px; 
+    overflow-y: auto; 
 }
 
 .dream-input-panel {
@@ -192,8 +200,8 @@ header h1 {
     flex-direction: column;
     border: 1px solid rgba(113, 109, 94, 0.15);
     backdrop-filter: blur(10px);
-    overflow-y: auto; /* Allow vertical scrolling within this panel */
-    flex-grow: 1; /* Allow to grow in flex context */
+    overflow-y: auto; 
+    flex-grow: 1; 
 }
 .sidebar-panel {
     flex: 1;
@@ -207,11 +215,12 @@ header h1 {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
     border: 1px solid rgba(113, 109, 94, 0.15);
     backdrop-filter: blur(10px);
-    overflow-y: hidden; /* Hide overflow here; scrollbar is on #filteredDreamsList */
-    flex-grow: 1; /* Allow to grow in flex context */
+    overflow-y: hidden; 
+    flex-grow: 1; 
 }
 
 /* Headings within panels */
+
 .dream-input-panel h2, .sidebar-panel h2 {
     color: #E0E0E0;
     margin-top: 0;
@@ -227,6 +236,7 @@ header h1 {
 }
 
 /* Input Group Styles */
+
 .input-group {
     margin-bottom: 20px;
     flex-shrink: 0;
@@ -243,12 +253,12 @@ header h1 {
 
 textarea,
 input[type="text"] {
-    width: calc(100% - 24px); /* Account for padding in width calculation */
+    width: calc(100% - 24px); 
     padding: 12px;
     border: 2px solid rgba(113, 109, 94, 0.3);
     border-radius: 8px;
     font-size: 1em;
-    box-sizing: border-box; /* Crucial for consistent sizing */
+    box-sizing: border-box; 
     transition: all 0.3s ease;
     background: rgba(45, 45, 45, 0.9);
     color: #FFFFFF;
@@ -272,6 +282,7 @@ textarea {
 }
 
 /* Button Styles */
+
 .button-group {
     display: flex;
     gap: 20px;
@@ -361,7 +372,8 @@ textarea {
     flex-shrink: 0;
 }
 
-/* Info Notes / Placeholder Box Styles */
+/* Info Notes & Placeholder Box Styles */
+
 .info-note {
     padding: 20px;
     border-radius: 15px;
@@ -388,6 +400,7 @@ textarea {
 }
 
 /* Shared styles for both filteredDreamsList and allDreamsGrid */
+
 .dreams-list, .dreams-grid {
     scrollbar-width: thin;
     scrollbar-color: rgba(113, 109, 94, 0.6) rgba(45, 45, 45, 0.6);
@@ -423,25 +436,23 @@ textarea {
     background: linear-gradient(145deg, rgba(45, 45, 45, 0.95) 0%, rgba(70, 70, 70, 0.95) 100%);
     border-radius: 8px;
     padding: 20px;
-    /* REMOVED: margin-bottom: 15px; - Grid gap handles spacing */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
     border: 1px solid rgba(113, 109, 94, 0.2);
-    position: relative; /* Context for any absolute children, keeps within flow */
+    position: relative; 
     backdrop-filter: blur(6px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes content apart, analyze button to bottom */
-    height: auto; /* Allow natural height based on content */
-    align-items: stretch; /* Ensure children stretch to fill width */
-    overflow: hidden; /* Crucial: Hides any content that overflows the item itself */
-    min-height: 150px; /* Ensure a minimum height for small content items */
+    justify-content: space-between; 
+    height: auto;
+    align-items: stretch; 
+    overflow: hidden; 
+    min-height: 150px; 
 }
 
-/* Crucial for grid layout: reset margin-bottom if it was set for list view */
 .dreams-grid .dream-item {
     margin-bottom: 0;
-    height: auto; /* Let grid control height with auto, instead of 100% which can be tricky */
+    height: auto;
 }
 
 .dream-item:hover {
@@ -459,7 +470,7 @@ textarea {
     border-bottom: 1px solid rgba(113, 109, 94, 0.25);
     padding-bottom: 8px;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-    word-wrap: break-word; /* Ensure long words break */
+    word-wrap: break-word;
 }
 
 .dream-item p {
@@ -467,7 +478,7 @@ textarea {
     font-size: 1em;
     color: #C0C0C0;
     line-height: 1.6;
-    word-wrap: break-word; /* Ensure long words break */
+    word-wrap: break-word; 
 }
 
 .dream-item strong {
@@ -482,7 +493,7 @@ textarea {
     border-radius: 6px;
     border: 1px solid rgba(113, 109, 94, 0.2);
     backdrop-filter: blur(4px);
-    flex-grow: 1; /* Allow details content to take space */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
 }
@@ -505,13 +516,14 @@ textarea {
     font-size: 0.9em;
     line-height: 1.7;
     color: #B0B0B0;
-    word-wrap: break-word; /* Ensure long words break */
-    overflow-y: auto; /* Add scroll for very long descriptions within details */
-    max-height: 200px; /* Limit height of expanded description */
-    padding-right: 5px; /* Space for scrollbar */
+    word-wrap: break-word; 
+    overflow-y: auto; 
+    max-height: 200px; 
+    padding-right: 5px; 
 }
 
 /* --- Calendar Styles --- */
+
 .calendar-section {
     background-color: rgba(30, 30, 30, 0.8);
     border-radius: 8px;
@@ -600,6 +612,7 @@ textarea {
 }
 
 /* Filtered Dreams List within Sidebar */
+
 #filteredDreamsList {
     flex-grow: 1;
     overflow-y: auto;
@@ -615,6 +628,7 @@ textarea {
 }
 
 /* --- ALL DREAMS GRID SCREEN LAYOUT --- */
+
 #allDreamsGridScreen h2 {
     color: #E0E0E0;
     margin-top: 0;
@@ -640,8 +654,8 @@ textarea {
     flex-direction: column;
     align-items: center;
     max-width: 1200px;
-    overflow-y: auto; /* IMPORTANT: Allows this container to scroll */
-    min-height: 0; /* Important for flex-grow to work correctly with overflow */
+    overflow-y: auto; 
+    min-height: 0;
 }
 
 .dreams-grid {
@@ -651,10 +665,11 @@ textarea {
     width: 100%;
     padding: 15px;
     box-sizing: border-box;
-    flex-grow: 1; /* Allow the grid to take available vertical space */
+    flex-grow: 1;
 }
 
 /* --- Navigation Buttons in Header --- */
+
 .app-nav {
     margin-top: 10px;
     display: flex;
@@ -679,6 +694,7 @@ textarea {
 }
 
 /* Style for the dream-item analyze button */
+
 .dream-item .analyze-btn {
     background-color: #555;
     color: #E0E0E0;
@@ -687,10 +703,10 @@ textarea {
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9em;
-    margin-top: auto; /* Pushes button to the bottom of the flex item */
-    align-self: flex-start; /* Align button to the left within the flex item, or center if using margin: auto */
+    margin-top: auto; 
+    align-self: flex-start; 
     transition: background-color 0.2s, transform 0.1s;
-    width: fit-content; /* Make button only as wide as its content */
+    width: fit-content;
 }
 
 .dream-item .analyze-btn:hover {
@@ -699,6 +715,7 @@ textarea {
 }
 
 /* Style for the analysis result paragraph within a dream-item */
+
 .dream-item .analysis-result {
     font-style: italic;
     font-size: 0.85em;
@@ -707,10 +724,11 @@ textarea {
     padding: 5px 0;
     border-top: 1px dashed rgba(113, 109, 94, 0.2);
     display: none;
-    word-wrap: break-word; /* Ensure analysis text wraps */
+    word-wrap: break-word;
 }
 
 /* --- Responsive adjustments for different screen sizes --- */
+
 @media (max-width: 1024px) {
     #mainRecordScreen {
         flex-direction: column;
