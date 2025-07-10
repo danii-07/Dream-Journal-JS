@@ -2,6 +2,8 @@
 
 This project is a Minimum Viable Prototype (MVP) for a desktop Dream Journal application, built using **Electron.js**. It serves as a foundational demonstration of core functionalities and showcases the application of various development skills in a practical context.
 
+Presentation link: https://www.canva.com/design/DAGswmD79CY/k03hAy09iD5Fzh6bg7BScg/view?utm_content=DAGswmD79CY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h1c21c591ee
+
 ---
 
 ## ✨ Features Implemented in this MVP:
