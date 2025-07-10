@@ -1,0 +1,67 @@
+@startuml dream_jo_classes
+title Dream Journal Class Diagram
+
+skinparam classAttributeIconSize 0
+
+' Define Classes'
+class DreamEntry {
+  + id: string <<unique>>
+  + description: string
+  + emotion: string
+  + keywords: Array<string>
+  + date: string (YYYY-MM-DDTHH:MM:SSZ)
+  + analysis: string (nullable)
+  --
+  + toJSON(): object
+}
+
+' This represents the logic in main.js dealing with dream data'
+class DreamManager <<main process>> {
+  - dreams: Array<DreamEntry>
+  - dreamsFilePath: string
+  --
+  + loadDreams(): Array<DreamEntry>
+  + saveDream(dream: DreamEntry): void
+  + analyzeDream(dreamContext: object): string
+  + deleteDream(id: string): void ' Added for completeness if you have this functionality'
+}
+
+' This represents the client-side JavaScript in renderer.js or index.html'
+class RendererUI <<renderer process>> {
+  --
+  + initUI(): void
+  + displayCalendar(dreams: Array<DreamEntry>): void
+  + displayFilteredList(dreams: Array<DreamEntry>): void
+  + displayGridView(dreams: Array<DreamEntry>): void
+  + handleSubmitDreamForm(): void
+  + handleAnalyzeButtonClick(): void
+  + updateAIAnalysisDisplay(analysis: string): void
+}
+
+' Represents the Electron IPC communication'
+interface ElectronIPC {
+  + saveDream(dream: object): Promise<void>
+  + loadDreams(): Promise<Array<object>>
+  + analyzeDream(context: object): Promise<string>
+}
+
+' Represents the external AI service'
+class GoogleGeminiAPIClient <<external>> {
+  + generateContent(prompt: string): Promise<object>
+}
+
+' Define Relationships'
+
+' DreamManager manages DreamEntry objects'
+DreamManager "1" o-- "*" DreamEntry : manages
+
+' RendererUI communicates with DreamManager via ElectronIPC'
+RendererUI ..> ElectronIPC : uses
+
+' ElectronIPC is implemented by the Main Process (conceptually)'
+ElectronIPC <|.. DreamManager : implements
+
+' DreamManager interacts with the Google Gemini API'
+DreamManager ..> GoogleGeminiAPIClient : invokes AI
+
+@enduml
